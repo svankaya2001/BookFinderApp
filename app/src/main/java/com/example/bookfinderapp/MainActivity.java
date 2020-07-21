@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         final ArrayList<Book> books = Book.fromJson(items);
                         // Remove all books from the adapter
                         bookAdapter.clear();
+
                         // Load model objects into the adapter
                         for (Book book : books) {
                             bookAdapter.add(book); // add book through the adapter

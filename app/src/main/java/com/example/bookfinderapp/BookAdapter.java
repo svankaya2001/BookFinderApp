@@ -1,15 +1,20 @@
 package com.example.bookfinderapp;
-
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
@@ -19,6 +24,8 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
+import static androidx.core.content.ContextCompat.startActivity;
+
 
 public class BookAdapter extends ArrayAdapter<Book> {
     private static class ViewHolder {
@@ -27,6 +34,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         public TextView bookAuthor;
         public TextView bookDesc;
         public ImageButton show, hide;
+        public Button previewBtn;
     }
 
     public BookAdapter(Context context, ArrayList<Book> aBooks) {
@@ -49,6 +57,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
             viewHolder.bookDesc = (TextView)convertView.findViewById(R.id.textDesc);
             viewHolder.show = (ImageButton)convertView.findViewById(R.id.show);
             viewHolder.hide  = (ImageButton)convertView.findViewById(R.id.hide);
+            viewHolder.previewBtn = (Button)convertView.findViewById(R.id.previewbtn);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -75,6 +84,17 @@ public class BookAdapter extends ArrayAdapter<Book> {
                 viewHolder.show.setVisibility(View.VISIBLE);
                 viewHolder.hide.setVisibility(View.INVISIBLE);
                 viewHolder.bookDesc.setMaxLines(3);
+
+            }
+        });
+
+        viewHolder.previewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = book.getPreviewLink();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(getContext(), intent, Bundle.EMPTY);
 
             }
         });

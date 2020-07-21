@@ -16,6 +16,7 @@ public class Book implements Serializable {
     private String bookTitle;
     private String bookImage;
     private String bookDesc;
+    private String previewLink;
 
     public String getBookTitle() {
         return bookTitle;
@@ -31,6 +32,9 @@ public class Book implements Serializable {
     public String getBookDesc(){
         return bookDesc;
     }
+    public String getPreviewLink(){
+        return previewLink;
+    }
 
     public static Book fromJson(JSONObject jsonObject) {
         Book book = new Book();
@@ -41,6 +45,7 @@ public class Book implements Serializable {
             book.bookAuthor = getAuthor(volumeInfo);
             book.bookImage = imageLinkInfo.getString("thumbnail");
             book.bookDesc = volumeInfo.getString("description");
+            book.previewLink = volumeInfo.getString("previewLink");
 
         } catch (JSONException e) {
             e.printStackTrace();
