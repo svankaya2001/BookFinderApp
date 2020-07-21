@@ -68,7 +68,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/description_text"
-        android:background="@drawable/arrow_up"
         android:clickable="true"
         android:layout_gravity="center"
         android:visibility="invisible" />

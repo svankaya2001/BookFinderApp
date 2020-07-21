@@ -40,6 +40,7 @@ public class Book implements Serializable {
             book.bookTitle = volumeInfo.getString("title");
             book.bookAuthor = getAuthor(volumeInfo);
             book.bookImage = imageLinkInfo.getString("thumbnail");
+            book.bookDesc = volumeInfo.getString("description");
 
         } catch (JSONException e) {
             e.printStackTrace();
