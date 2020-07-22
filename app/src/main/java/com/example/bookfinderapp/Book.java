@@ -1,6 +1,7 @@
 package com.example.bookfinderapp;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -11,12 +12,16 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import static android.content.ContentValues.TAG;
+
 public class Book implements Serializable {
     private String bookAuthor;
     private String bookTitle;
     private String bookImage;
     private String bookDesc;
     private String previewLink;
+    private String downloadLink;
+    private String DownloadLinkAvailable;
 
     public String getBookTitle() {
         return bookTitle;
@@ -35,18 +40,32 @@ public class Book implements Serializable {
     public String getPreviewLink(){
         return previewLink;
     }
+    public String getDownloadLinkAvailable(){
+        return DownloadLinkAvailable;
+    }
+    public String getDownloadLink(){
+        return downloadLink;
+    }
 
     public static Book fromJson(JSONObject jsonObject) {
         Book book = new Book();
         try {
             JSONObject volumeInfo = jsonObject.getJSONObject("volumeInfo");
+            JSONObject accessInfo = jsonObject.getJSONObject("accessInfo");
             JSONObject imageLinkInfo = volumeInfo.getJSONObject("imageLinks");
             book.bookTitle = volumeInfo.getString("title");
             book.bookAuthor = getAuthor(volumeInfo);
             book.bookImage = imageLinkInfo.getString("thumbnail");
             book.bookDesc = volumeInfo.getString("description");
             book.previewLink = volumeInfo.getString("previewLink");
-
+            book.DownloadLinkAvailable = accessInfo.getJSONObject("pdf").getString("isAvailable");
+            //Log.i(TAG, "fromJson: "+ book.DownloadLinkAvailable);
+            try {
+                book.downloadLink = accessInfo.getJSONObject("pdf").getString("acsTokenLink");
+            } catch (JSONException e) {
+                e.printStackTrace();
+                book.downloadLink = null;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

@@ -34,7 +34,9 @@ public class BookAdapter extends ArrayAdapter<Book> {
         public TextView bookAuthor;
         public TextView bookDesc;
         public ImageButton show, hide;
-        public Button previewBtn;
+        public Button previewBtn, downloadBtn;
+
+
     }
 
     public BookAdapter(Context context, ArrayList<Book> aBooks) {
@@ -58,6 +60,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
             viewHolder.show = (ImageButton)convertView.findViewById(R.id.show);
             viewHolder.hide  = (ImageButton)convertView.findViewById(R.id.hide);
             viewHolder.previewBtn = (Button)convertView.findViewById(R.id.previewbtn);
+            viewHolder.downloadBtn = (Button)convertView.findViewById(R.id.downloadBtn);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -68,6 +71,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         Glide.with(getContext()).load(book.getBookImage()).error(R.drawable.books).into(viewHolder.bookImage);
         //Log.i(TAG, "getView: "+book.getBookImage());
         viewHolder.bookDesc.setText(book.getBookDesc());
+        String islinkavailable = book.getDownloadLinkAvailable();
         viewHolder.show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,7 +102,25 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
             }
         });
+        //Log.i(TAG, "getView: " + islinkavailable);
+        if(islinkavailable == "true") {
+            viewHolder.downloadBtn.setVisibility(View.VISIBLE);
 
+        }else{
+            viewHolder.downloadBtn.setVisibility(View.GONE);
+        }
+        viewHolder.downloadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String downloadurl = book.getDownloadLink();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(downloadurl));
+                startActivity(getContext(), intent, Bundle.EMPTY);
+
+
+            }
+        });
         return convertView;
     }
 }
